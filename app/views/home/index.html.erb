@@ -117,6 +117,7 @@ function createNode() {
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
     .text((randomFeeling));
+
   force.start();
 }
 
@@ -146,16 +147,14 @@ function fadeAway(){
 	request.fail(function( jqXHR, textStatus ) {
 	  alert( "Request failed: " + textStatus );
 	});
+	createNode()
 }
 
 var feelings = ["i'm sad","i'm lonely","i'm horrible","i'm a shitty person",'i suck']
 function randomFeeling(){
   return feelings[Math.floor(Math.random()*feelings.length)];
 }
-// $('g:last-of-type').hide();
 
-var intervalId = setInterval(createNode, 2000);
-// clearInterval(intervalId);
 }
 
 
