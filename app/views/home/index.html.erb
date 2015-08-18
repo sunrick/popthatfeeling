@@ -1,163 +1,177 @@
 <script>
 
-if($(window).width() === 0){
-  $( window ).resize(function(){
-    main();
-  });
-  }
-else {
-  main();
-}
+	main();
 
-$(window).resize(function(){
-  var width = (windowWidth());
-  var height = (windowHeight());
-  $('svg')
-  .attr('height',height)
-  .attr('width',width);
-});
+	var feelings = ["i'm sad","i'm lonely","i'm horrible","i'm a shitty person",'i suck'];
 
-function windowHeight(){
-  var hWindow = $(window).height();
-  if(hWindow < 600){
-    var height = 600;
-  }
-  else {
-    var height = hWindow;
-  }
-  return height;
-}
+	function main() {
+		if($(window).width() === 0){
+			$(window).resize(function(){
+				game();
+			});
+		}
+		else {
+			game();
+		}
+		resize();
+	}
 
-function windowWidth(){
-  var wWindow = $(window).width();
-  if(wWindow < 960){
-   var width = 960;
-  }
-  else {
-   var width = wWindow;
-  }
-  return width;
-}
+	function resize() {
+		$(window).resize(function(){
+			var width = (windowWidth());
+			var height = (windowHeight());
+			$('svg')
+			.attr('height',height)
+			.attr('width',width);
+		});
+	}
 
+	function windowHeight(){
+		var hWindow = $(window).height();
+		if(hWindow < 600){
+			var height = 600;
+		}
+		else {
+			var height = hWindow;
+		}
+		return height;
+	}
 
-function main(){
-//Width and height
-var w = (windowWidth());
-var h = (windowHeight());
-
-//Original data
-var dataset = {
-    nodes: [{}]
-};
-
-//Initialize a default force layout, using the nodes and edges in dataset
-var force = d3.layout.force()
-    .nodes(dataset.nodes)
-    .size([w, h])
-    .charge(-500)
-    .gravity(0.5)
-    .start();
-
-var colors = d3.scale.category10();
-
-//Create SVG element
-var svg = d3.select("body")
-    .append("svg")
-    .attr("width", w)
-    .attr("height", h);
-
-//Create nodes as circles
-var nodes = svg.selectAll("g")
-    .data(dataset.nodes)
-    .enter()
-    .append("g")
-    .on("click", fadeAway);
-
-nodes.append("circle")
-    .attr("class","node")
-    .attr("cx", 0)
-    .attr("cy", 0)
-    .attr("r", 100)
-    .style("fill", "red");
-
-nodes.append("text")
-    .attr("x", 0)
-    .attr("dy", ".35em")
-    .attr("text-anchor", "middle")
-    .text("click me");
-
-//Every time the simulation "ticks", this will be called
-force.on("tick", function () {
-    // nodes.attr("cx", function(d) { return d.x; })
-    //     .attr("cy", function(d) { return d.y; });
-    nodes.attr("transform", function (d) {
-        return "translate(" + d.x + "," + d.y + ")";
-    });
-
-});
-
-function createNode() {
-
-  var node = {"x":randomPosition,"y":randomPosition};
-
-  dataset.nodes.push(node);
-  nodes = nodes.data(dataset.nodes);
-
-  var newNode = nodes.enter().insert("g").on("click", fadeAway); 
-
-  newNode.append('circle')
-    .attr("class","node")
-    .attr("cx", newNode.x)
-    .attr("cy", newNode.y)
-    .attr("r", 50)
-    .style("fill", "red");
-
-  var someText = newNode.append("text")
-    .attr("x", 0)
-    .attr("dy", ".35em")
-    .attr("text-anchor", "middle")
-    .text((randomFeeling));
-
-  force.start();
-}
-
-function randomPosition() {
-  return Math.round(Math.random()*10000000);
-}
-
-function fadeAway(){
-  d3.select(this).style("opacity", 1)
-                 .transition()
-                 .duration(200)
-                 .style("opacity", 0)
-                 .remove();
-  var circleText = d3.select(this).selectAll('text');
-  var feeling = $(circleText).text();
-  var request = $.ajax({
-	  url: "/feeling",
-	  method: "POST",
-	  data: { text : feeling },
-	  dataType: "html"
-	});
-	 
-	request.done(function( msg ) {
-	  console.log("success");
-	});
-	 
-	request.fail(function( jqXHR, textStatus ) {
-	  alert( "Request failed: " + textStatus );
-	});
-	createNode()
-}
-
-var feelings = ["i'm sad","i'm lonely","i'm horrible","i'm a shitty person",'i suck']
-function randomFeeling(){
-  return feelings[Math.floor(Math.random()*feelings.length)];
-}
-
-}
+	function windowWidth(){
+		var wWindow = $(window).width();
+		if(wWindow < 960){
+			var width = 960;
+		}
+		else {
+			var width = wWindow;
+		}
+		return width;
+	}
 
 
-    
+	function game(){
+		//Width and height
+		var w = (windowWidth());
+		var h = (windowHeight());
+		var r = 50;
+
+		//Original data
+		var dataset = {
+			nodes: [{}]
+		};
+
+		//Initialize a default force layout, using the nodes and edges in dataset
+		var force = d3.layout.force()
+									.nodes(dataset.nodes)
+									.size([w, h])
+									.charge(-200)
+									.gravity(0.05)
+									.start();
+
+		var colors = d3.scale.category10();
+
+		//Create SVG element
+		var svg = d3.select("body")
+								.append("svg")
+								.attr("width", w)
+								.attr("height", h);
+
+		//Create nodes as circles
+		var nodes = svg.selectAll("g")
+									 .data(dataset.nodes)
+									 .enter()
+									 .append("g")
+									 .on("click", fadeAway);
+
+		var circles = nodes.append("circle")
+				  						 .attr("class","node")
+											 .attr("cx", 0)
+											 .attr("cy", 0)
+											 .attr("r", r)
+											 .style("fill", "red");
+
+		var texts = nodes.append("text")
+										 .attr("x", 0)
+										 .attr("dy", ".35em")
+										 .attr("text-anchor", "middle")
+										 .text("click me");
+
+		//Every time the simulation "ticks", this will be called
+		force.on("tick", function () {
+		    nodes.attr("transform", function (d) {
+		    	// var xMax = Math.max(r, Math.min(w - r, d.x))
+		    	// var yMax = Math.max(r, Math.min(h - r, d.y))
+		    	return "translate(" + d.x + "," + d.y + ")";
+		    });
+
+		});
+
+		function createNode() {
+
+			var node = {"x":randomPosition(),"y":randomPosition()};
+
+			dataset.nodes.push(node);
+			nodes = nodes.data(dataset.nodes);
+
+			var newNode = nodes.enter()
+												 .insert("g")
+												 .on("click", fadeAway); 
+
+			newNode.append('circle')
+						 .attr("class","node")
+						 .attr("cx", newNode.x)
+						 .attr("cy", newNode.y)
+						 .attr("r", r)
+						 .style("fill", "red");
+
+			var someText = newNode.append("text")
+														.attr("x", 0)
+														.attr("dy", ".35em")
+														.attr("text-anchor", "middle")
+														.text((randomFeeling));
+
+			force.start();
+
+		}
+
+		function randomPosition() {
+			var numArray = [1];
+			var randomNum = numArray[Math.floor(Math.random() * numArray.length)];
+			var randomNum = randomNum * Math.round(Math.random()*600);
+			return randomNum;
+
+		}
+
+		function fadeAway(){
+			d3.select(this).style("opacity", 1)
+										 .transition()
+										 .duration(200)
+										 .style("opacity", 0)
+										 .remove();
+			var feeling = d3.select(this).selectAll('text');
+			var feeling = $(feeling).text();
+			
+			var request = $.ajax({
+				url: "/feeling",
+				method: "POST",
+				data: { text : feeling },
+				dataType: "html"
+			});
+
+			request.done(function( msg ) {
+			});
+
+			request.fail(function( jqXHR, textStatus ) {
+				console.log( "Request failed: " + textStatus );
+			});
+
+			createNode();
+		}
+
+		function randomFeeling(){
+			return feelings[Math.floor(Math.random()*feelings.length)];
+		}
+
+	}
 
 </script>
