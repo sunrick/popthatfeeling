@@ -1,7 +1,12 @@
 class FeelingsController < ApplicationController
 
   def create
-    Feeling.create(text: params[:text])
-    render nothing: true
+    if params[:text].downcase != "click me"
+      Feeling.create(text: params[:text])
+      render nothing: true
+    else
+      render nothing: true
+    end
   end
+
 end
