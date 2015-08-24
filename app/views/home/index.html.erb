@@ -175,7 +175,7 @@
 			var request = $.ajax({
 				url: "/feeling",
 				method: "POST",
-				data: { text : feeling },
+				data: { text : feeling, session_id : session_id },
 				dataType: "html"
 			});
 
