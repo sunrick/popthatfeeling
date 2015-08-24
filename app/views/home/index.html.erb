@@ -1,5 +1,26 @@
 <script>
 
+	var session_id;
+
+	$.ajax({
+			url: "/session/create",
+			method: "POST",
+			data: {},
+			dataType: "json",
+			success: function ( msg ) {
+									session_id = msg.id;
+								}
+	});
+
+	$( window ).unload(function() {
+		$.ajax({
+				url: "/session/end",
+				method: "PUT",
+				data: { session_id: session_id}
+		});
+	});
+
+
 	main();
 
 	var feelings = ["i'm sad","i'm lonely","i'm horrible","i'm a shitty person",'i suck'];
