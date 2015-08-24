@@ -65,7 +65,7 @@
 									.nodes(dataset.nodes)
 									.size([w, h])
 									.charge(-200)
-									.gravity(0.05)
+									.gravity(0.2)
 									.start();
 
 		var colors = d3.scale.category10();
@@ -137,7 +137,7 @@
 		function randomPosition() {
 			var numArray = [1];
 			var randomNum = numArray[Math.floor(Math.random() * numArray.length)];
-			var randomNum = randomNum * Math.round(Math.random()*600);
+			var randomNum = randomNum * Math.round(Math.random()*1200);
 			return randomNum;
 
 		}
