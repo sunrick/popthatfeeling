@@ -5,5 +5,8 @@ Rails.application.routes.draw do
   # feelings routes
   post 'feeling', to: 'feelings#create'
 
+  # session routes
+  post 'session/create', to: 'sessions#create'
+  put 'session/end', to: 'sessions#end'
   
 end
