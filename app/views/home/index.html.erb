@@ -10,13 +10,12 @@
 
 var feelings = []
 
-$( "#something" ).click(function( event ) {
+$( "#something" ).click(function() {
 	feelings = []
 	$('#test').children('input').each(function () {
     	feelings.push(this.value);
 	});
 	main();
-  event.preventDefault();
 });
 	
 
@@ -41,6 +40,7 @@ $( "#something" ).click(function( event ) {
 	});
 
 	function main() {
+		$('svg').remove();
 		if($(window).width() === 0){
 			$(window).resize(function(){
 				game();
@@ -101,7 +101,7 @@ $( "#something" ).click(function( event ) {
 									.nodes(dataset.nodes)
 									.size([w, h])
 									.charge(-200)
-									.gravity(0.2)
+									.gravity(0.3)
 									.start();
 
 		var colors = d3.scale.category10();
@@ -202,7 +202,7 @@ $( "#something" ).click(function( event ) {
 		function fadeAway(){
 			d3.select(this).style("opacity", 1)
 										 .transition()
-										 .duration(200)
+										 .duration(0)
 										 .style("opacity", 0)
 										 .remove();
 			var feeling = d3.select(this).selectAll('text');
