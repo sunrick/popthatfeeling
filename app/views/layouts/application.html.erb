@@ -7,6 +7,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<script>
+		$(".button-collapse").sideNav();
+	</script>
+  <ul id="slide-out" class="side-nav">
+  	<li><%= link_to 'popthatfeeling', root_path %></li>
+    <li><%= link_to 'but why?', why_path %></li>
+    <li><%= link_to 'contact', contact_path %></li>
+  </ul>
+  <a style="position:absolute; top:10px; left:10px;"href="#" data-activates="slide-out" class="button-collapse"><i style="line-height:1;" class="medium mdi-navigation-menu"></i></a>
 
 <%= yield %>
 
