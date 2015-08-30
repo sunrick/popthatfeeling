@@ -33,7 +33,7 @@
 <script>
 
 
-var feelings = []
+var feelings = [];
 
 $( "#something" ).click(function() {
 	feelings = []
@@ -46,26 +46,30 @@ $( "#something" ).click(function() {
 
 	var session_id;
 
-	$.ajax({
-			url: "/session/create",
-			method: "POST",
-			data: {},
-			dataType: "json",
-			success: function ( msg ) {
-									session_id = msg.id;
-								}
-	});
-
 	$( window ).unload(function() {
-		$.ajax({
-				url: "/session/end",
-				method: "PUT",
-				data: { session_id: session_id}
-		});
+		if (session_id !== undefined){
+			$.ajax({
+					url: "/session/end",
+					method: "PUT",
+					async: false,
+					data: { session_id: session_id}
+			});
+		}
 	});
 
 	function main() {
 		$('svg').remove();
+		if(session_id === undefined) {
+			$.ajax({
+				url: "/session/create",
+				method: "POST",
+				data: {},
+				dataType: "json",
+				success: function ( msg ) {
+										session_id = msg.id;
+									}
+			});
+		}
 		if($(window).width() === 0){
 			$(window).resize(function(){
 				game();
