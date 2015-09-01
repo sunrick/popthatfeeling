@@ -22,15 +22,22 @@
         </div>
       </div>
   
-
+<i class="large material-icons">insert_chart</i>
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
     <div class="modal-content">
-		      <form id="test">
-		 <input type="text" name="firstname">
-		 <input type="text" name="firstname">
-		</form>
+			<form id="test">
+				<div class="row">
+					<div class="col s11">
+				 <input type="text" placeholder="How are you feeling?">
+				 </div>
+				 <div class="col s1">
+				 	<i class="material-icons delete">delete</i>
+				 </div>
+				</div>
+			</form>
     <div class="modal-footer">
+    	<i class="material-icons add">add_circle</i>
       <a id="something" href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
     </div>
   </div>
@@ -38,6 +45,13 @@
 
 
 <script>
+
+$('.material-icons.delete').click(function(){
+	$(this).closest('.row').slideUp(200, function(){ $(this).remove()});
+});
+$('.material-icons.add').click(function(){
+	$('form').append('<div class="row"><div class="col s11"><input type="text" placeholder="How are you feeling?"></div><div class="col s1"><i class="material-icons delete">delete</i></div></div>');
+});
 
 $('#trigger-modal').click(function(){
 	if($(this).hasClass('fixed-top-right') === false){
@@ -58,7 +72,7 @@ var feelings = [];
 
 $( "#something" ).click(function() {
 	feelings = []
-	$('#test').children('input').each(function () {
+	$('#test').find('input').each(function () {
     	feelings.push(this.value);
 	});
 	main();
