@@ -8,7 +8,21 @@
 </script>
 
   <!-- Modal Trigger -->
-  <a style="position: absolute; right:10px; top: 10px;" class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+   <div class="row">
+        <div class="col s12 m6">
+          <div class="card fixed-centered">
+            <div class="card-content">
+              <span class="card-title black-text">Card Title</span>
+              <p>I am a very simple card. I am good at containing small bits of information.
+              I am convenient because I require little markup to use effectively.</p>
+            </div>
+            <div class="card-action">
+              <a id="trigger-modal" class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  
 
   <!-- Modal Structure -->
   <div id="modal1" class="modal">
@@ -25,6 +39,20 @@
 
 
 <script>
+
+$('#trigger-modal').click(function(){
+	if($(this).hasClass('fixed-top-right') === false){
+		var clone = $(this).clone();
+		$(this).parent().fadeOut(100, function(){
+			$(this).parent().remove();
+			var new_button = $(clone).appendTo('body').hide();
+			$(new_button).addClass('fixed-top-right');
+			$(new_button).fadeIn(100);
+			$('.modal-trigger').leanModal();
+		});
+	}
+});
+
 
 
 var feelings = [];
