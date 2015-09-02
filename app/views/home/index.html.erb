@@ -75,12 +75,13 @@ $('#trigger-modal').click(function(){
 
 var feelings = [];
 
-$( "#something" ).click(function() {
+$( "#something" ).click(function(e) {
 	feelings = []
 	$('#test').find('input').each(function () {
     	feelings.push(this.value);
 	});
 	main();
+	e.preventDefault();
 });
 	
 
