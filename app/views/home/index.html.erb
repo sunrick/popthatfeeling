@@ -1,5 +1,6 @@
 
 <script>
+
 	
 	$(document).ready(function(){
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
@@ -72,6 +73,7 @@ $('#trigger-modal').click(function(){
 });
 
 
+var audio = new Audio('blop.mp3');
 
 var feelings = [];
 var test = true;
@@ -182,8 +184,7 @@ $( "#something" ).click(function(e) {
 		var force = d3.layout.force()
 									.nodes(dataset.nodes)
 									.size([w, h])
-									.charge(-200)
-									.gravity(0.3)
+									.gravity(0.01)
 									.start();
 
 		var colors = d3.scale.category10();
@@ -221,9 +222,9 @@ $( "#something" ).click(function(e) {
 		//Every time the simulation "ticks", this will be called
 		force.on("tick", function () {
 		    nodes.attr("transform", function (d) {
-		    	// var xMax = Math.max(r, Math.min(w - r, d.x))
-		    	// var yMax = Math.max(r, Math.min(h - r, d.y))
-		    	return "translate(" + d.x + "," + d.y + ")";
+		    	var xMax = Math.max(r, Math.min(w - r, d.x))
+		    	var yMax = Math.max(r, Math.min(h - r, d.y))
+		    	return "translate(" + xMax + "," + yMax + ")";
 		    });
 
 		});
@@ -232,7 +233,7 @@ $( "#something" ).click(function(e) {
 
 		function createNode() {
 
-			var node = {"x":randomPosition(),"y":randomPosition()};
+			var node = {"x":randomPosition(25,w-25),"y":randomPosition(25,h-25)};
 			var theFeeling = randomFeeling()
 
 			dataset.nodes.push(node);
@@ -273,12 +274,8 @@ $( "#something" ).click(function(e) {
 
 		}
 
-		function randomPosition() {
-			var numArray = [1];
-			var randomNum = numArray[Math.floor(Math.random() * numArray.length)];
-			var randomNum = randomNum * Math.round(Math.random()*1200);
-			return randomNum;
-
+		function randomPosition(min, max) {
+			return Math.floor(Math.random()*(max-min+1)+min);
 		}
 
 		function fadeAway(){
@@ -287,6 +284,7 @@ $( "#something" ).click(function(e) {
 										 .duration(0)
 										 .style("opacity", 0)
 										 .remove();
+    	audio.play();
 			var feeling = d3.select(this).selectAll('text');
 			var feeling = $(feeling).text();
 			
