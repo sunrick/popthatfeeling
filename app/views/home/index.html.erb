@@ -35,7 +35,7 @@
 			</div>
 		</form>
     <div class="modal-footer">
-      <a id="something" href="#!" class=" modal-action modal-close waves-effect waves-green btn right">Ok time to pop!</a>
+      <a id="something" href="#!" class="modal-action waves-effect waves-green btn right">Ok time to pop!</a>
     </div>
   </div>
 
@@ -74,13 +74,25 @@ $('#trigger-modal').click(function(){
 
 
 var feelings = [];
+var test = true;
 
 $( "#something" ).click(function(e) {
 	feelings = []
 	$('#test').find('input').each(function () {
-    	feelings.push(this.value);
+			if($(this).val() === ""){
+				$(this).before("<span> Hey this can't be empty! </span>");
+				test = false;
+				return false;
+			}
+			else {
+				test = true;
+    		feelings.push(this.value);
+    	}
 	});
-	main();
+	if(test){
+		$('#modal1').closeModal();
+		main();
+	}
 	e.preventDefault();
 });
 	
