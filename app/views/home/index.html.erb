@@ -8,6 +8,8 @@
   });
 </script>
 
+<a id="sound" href="#">Mute</a>
+
   <!-- Modal Trigger -->
   <div class="card fixed-centered">
     <div class="card-content">
@@ -72,8 +74,18 @@ $('#trigger-modal').click(function(){
 	}
 });
 
-
+var sound = true;
 var audio = new Audio('blop.mp3');
+
+$('#sound').click(function(){
+	sound = !sound;
+	if(sound){
+		$(this).text('mute');
+	}
+	else {
+		$(this).text('unmute');
+	}
+});
 
 var feelings = [];
 var test = true;
@@ -284,7 +296,9 @@ $( "#something" ).click(function(e) {
 										 .duration(0)
 										 .style("opacity", 0)
 										 .remove();
-    	audio.play();
+			if (sound){
+				audio.play();
+			}
 			var feeling = d3.select(this).selectAll('text');
 			var feeling = $(feeling).text();
 			
