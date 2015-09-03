@@ -73,7 +73,7 @@ $('#trigger-modal').click(function(){
 		var clone = $(this).clone();
 		$(this).parent().fadeOut(100, function(){
 			$(this).parent().remove();
-			var new_button = $('<li><a id="trigger-modal" class="modal-trigger" href="#modal1">Edit Feelings</a></li>').appendTo('#right-links').hide();
+			var new_button = $('<li><a id="trigger-modal" class="modal-trigger" href="#modal1"><i class="material-icons">edit</i></a></li>').prependTo('#right-links').hide();
 			$(new_button).addClass('modal-nav')
 			$(new_button).fadeIn(100);
 			$('.modal-trigger').leanModal();
@@ -84,15 +84,15 @@ $('#trigger-modal').click(function(){
 var sound = true;
 var audio = new Audio('blop.mp3');
 
-$('#right-links').append('<li><a id="sound" href="#">Mute</a></li>');
+$('#right-links').append('<li><a id="sound" href="#"><i class="material-icons">volume_up</i></a></li>');
 
 $('#sound').click(function(){
 	sound = !sound;
 	if(sound){
-		$(this).text('Mute');
+		$(this).html('<i class="material-icons">volume_up</i>');
 	}
 	else {
-		$(this).text('Unmute');
+		$(this).html('<i class="material-icons">volume_off</i>');
 	}
 });
 

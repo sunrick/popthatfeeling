@@ -11,7 +11,9 @@
 <body>
   <nav>
    <div class="nav-wrapper">
-      <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+      <ul id="left-ul">
+        <li><a id="side-slider" href="#" data-activates="slide-out"><i class="material-icons">menu</i></a><li>
+      </ul>
      
     <ul id="right-links" class="right hide-on-med-and-down">
       
@@ -28,7 +30,7 @@
 <%= yield %>
 
   <script>
-  	$(".button-collapse").sideNav();
+  	$("#side-slider").sideNav();
   </script>
 
 </body>
