@@ -16,19 +16,6 @@
 
 @import "materialize";
 
-.fixed-centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  transform: translate(-50%, -50%);
-}
-.fixed-top-right {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-}
-
 .add {
 	color:green;
 	cursor: pointer; 
