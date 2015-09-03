@@ -46,3 +46,17 @@ svg g {
 	cursor: hand;
 	z-index: 9999;
 }
+
+nav {
+	box-shadow: none;
+	background-color: #fff;
+}
+
+nav .nav-wrapper i {
+	color: #000;
+	font-size: 4rem;
+}
+
+nav a.button-collapse {
+	display: block;
+}
