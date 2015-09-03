@@ -8,8 +8,6 @@
   });
 </script>
 
-<a id="sound" href="#">Mute</a>
-
   <!-- Modal Trigger -->
   <div class="card fixed-centered">
     <div class="card-content">
@@ -61,13 +59,22 @@ $('form').on( "click", '.material-icons.add', function() {
 	$("<%= escape_javascript(render partial: 'form') %>").appendTo('form').hide().slideDown(200);
 });
 
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+
 $('#trigger-modal').click(function(){
-	if($(this).hasClass('fixed-top-right') === false){
+	if($(this).hasClass('modal-nav') === false){
 		var clone = $(this).clone();
 		$(this).parent().fadeOut(100, function(){
 			$(this).parent().remove();
-			var new_button = $(clone).appendTo('body').hide();
-			$(new_button).addClass('fixed-top-right');
+			var new_button = $('<li><a id="trigger-modal" class="modal-trigger" href="#modal1">Edit Feelings</a></li>').appendTo('#right-links').hide();
+			$(new_button).addClass('modal-nav')
 			$(new_button).fadeIn(100);
 			$('.modal-trigger').leanModal();
 		});
@@ -77,13 +84,15 @@ $('#trigger-modal').click(function(){
 var sound = true;
 var audio = new Audio('blop.mp3');
 
+$('#right-links').append('<li><a id="sound" href="#">Mute</a></li>');
+
 $('#sound').click(function(){
 	sound = !sound;
 	if(sound){
-		$(this).text('mute');
+		$(this).text('Mute');
 	}
 	else {
-		$(this).text('unmute');
+		$(this).text('Unmute');
 	}
 });
 
@@ -159,13 +168,7 @@ $( "#something" ).click(function(e) {
 	}
 
 	function windowHeight(){
-		var hWindow = $(window).height();
-		if(hWindow < 600){
-			var height = 600;
-		}
-		else {
-			var height = hWindow;
-		}
+		height = $(window).height() - $('nav').height();
 		return height;
 	}
 

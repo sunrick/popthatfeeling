@@ -47,9 +47,14 @@ svg g {
 	z-index: 9999;
 }
 
+/* for some reason this helps with window size calculation*/
+svg {
+	display:block;
+}
+
 nav {
 	box-shadow: none;
-	background-color: #fff;
+	background-color: transparent;
 }
 
 nav .nav-wrapper i {
@@ -59,4 +64,8 @@ nav .nav-wrapper i {
 
 nav a.button-collapse {
 	display: block;
+}
+
+#right-links a {
+	color: #000;
 }
