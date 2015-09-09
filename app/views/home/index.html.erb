@@ -44,10 +44,13 @@
 $('form').on( "click", '.material-icons.delete', function() {
 	$(this).closest('.row').slideUp(200, function(){ 
 		$(this).remove();
-		var numInputs = $('input').length;
-		if( numInputs === 1) {
-			$('.icons').append('<i class="material-icons add">add_circle</i>');
+		// var numInputs = $('input').length;
+		if( $('form .icons:last-child .material-icons.add').last().length === 0 ){
+			$('form .row:last-child .icons.right').append('<i class="material-icons add">add_circle</i>');
 		}
+		// if( numInputs === 1) {
+		// 	$('.icons').append('<i class="material-icons add">add_circle</i>');
+		// }
 	});
 });
 
