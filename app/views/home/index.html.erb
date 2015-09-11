@@ -41,6 +41,58 @@
 
 <script>
 
+$(window).on("blur focus", function(e) {
+    var prevType = $(this).data("prevType");
+
+    if (prevType != e.type) {   //  reduce double fire issues
+        switch (e.type) {
+            case "blur":
+            	clearInterval(timer)
+                break;
+            case "focus":
+            	timer = setInterval(function(){
+					lets_count('current_sessions', 'person');
+					lets_count('feelings_today', 'cloud');
+					}, 10000);
+                break;
+        }
+    }
+    $(this).data("prevType", e.type);
+})
+
+function lets_count(path, icon){
+	$.ajax({
+		url: "/stats/"+path,
+		method: "GET",
+		data: {},
+		dataType: "json",
+		success: function ( msg ) {
+								current_count(msg.count, icon);
+							}
+	});
+}
+
+lets_count('current_sessions', 'person');
+lets_count('feelings_today', 'cloud');
+
+function current_count(count, icon){
+	var oldCount = +$("#"+icon +' span').text();
+	if (count !== oldCount){
+		$("#"+icon +' span').fadeOut(500,function(){
+			$("#"+icon +' span').text(count);
+		});
+		$("#"+icon +' span').fadeIn(500);
+	}
+}
+
+timer = setInterval(function(){
+	lets_count('current_sessions', 'person');
+	lets_count('feelings_today', 'cloud');
+	}, 10000);
+
+
+
+
 $('form').on( "click", '.material-icons.delete', function() {
 	$(this).closest('.row').slideUp(200, function(){ 
 		$(this).remove();
@@ -217,13 +269,6 @@ $( "#something" ).click(function(e) {
 									 .append("g")
 									 .on("click", fadeAway);
 
-		// var circles = nodes.append("circle")
-		// 		  						 .attr("class","node")
-		// 									 .attr("cx", 0)
-		// 									 .attr("cy", 0)
-		// 									 .attr("r", r)
-		// 									 .style("fill", "red");
-
 		var path = nodes.append('path')
 										.attr('d', 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z');
 
@@ -256,27 +301,19 @@ $( "#something" ).click(function(e) {
 
 			var newNode = nodes.enter()
 												 .insert("g")
-												 .on("click", fadeAway); 
+												 .on("click", fadeAway);
 
-			// newNode.append('circle')
-			// 			 .attr("class","node")
-			// 			 .attr("cx", newNode.x)
-			// 			 .attr("cy", newNode.y)
-			// 			 .attr("r", r)
-			// 			 .style("fill", "red");
+  		var path = nodes.append('path')
+        							.attr('d', 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z')
+        							.attr('transform', function(d){
 
-		var path = nodes.append('path')
-										.attr('d', 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z')
-										.attr('transform', function(d){
-
-											if( theFeeling.length > 9 ){
-												return 'scale('+ (1 + (theFeeling.length - 9) * 0.07) +')'
-											}
-											else {
-												return 'scale(1)'
-											}
-
-										});
+        							if( theFeeling.length > 9 ){
+        								return 'scale('+ (1 + (theFeeling.length - 9) * 0.07) +')'
+        								}
+        							else {
+        								return 'scale(1)'
+        								}
+        							});
 
 			var someText = newNode.append("text")
 														.attr("x", 0)
@@ -294,30 +331,20 @@ $( "#something" ).click(function(e) {
 		}
 
 		function fadeAway(){
-			d3.select(this).style("opacity", 1)
-										 .transition()
-										 .duration(0)
-										 .style("opacity", 0)
-										 .remove();
+			d3.select(this).remove();
 			if (sound){
 				audio.play();
 			}
 			var feeling = d3.select(this).selectAll('text');
 			var feeling = $(feeling).text();
 			
-			var request = $.ajax({
+			$.ajax({
 				url: "/feeling",
 				method: "POST",
 				data: { text : feeling, session_id : session_id },
 				dataType: "html"
 			});
 
-			request.done(function( msg ) {
-			});
-
-			request.fail(function( jqXHR, textStatus ) {
-				console.log( "Request failed: " + textStatus );
-			});
 
 			createNode();
 		}
