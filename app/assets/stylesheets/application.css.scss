@@ -34,6 +34,16 @@ svg g {
 	z-index: 9999;
 }
 
+svg text {
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
+
+	/* Rules below not implemented in browsers yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
 /* for some reason this helps with window size calculation*/
 svg {
 	display:block;
