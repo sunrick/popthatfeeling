@@ -1,115 +1,137 @@
-
-<script>
-
-	
+<script>	
 	$(document).ready(function(){
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
   });
+
+  $(document).ready(function(){
+    $('.canvas-container').height($(window).height() - $('nav').height());
+   });
+
+  $(window).resize(function(){
+    $('.canvas-container').height($(window).height() - $('nav').height());
+  });
 </script>
 
-	<div id="welcome" class="container">
-		<div class="row">
-			<div class="col s12 center-align">
-				<h1> How are you feeling? </h1>
-				<p class="flow-text"> Click the button below to get started.</p>
-				<a id="trigger-modal" class="btn-floating btn-large modal-trigger" href="#modal1"><i class="material-icons">edit</i></a>
-			</div>
-		</div>	
-	</div>
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-    <form id="test">
-			<div class="row">
-				<div class="col s10">
-					<input type="text" placeholder="How are you feeling?">
-				</div>
-				<div style="padding-top:15px;" class="col s2">
-					<div class="icons right">
-						<i class="material-icons add">add_circle</i>
-					</div>
-				</div>
-			</div>
-		</form>
+<div id="welcome" class="container">
+  <div class="row">
+    <div class="col s12 center-align">
+      <h1> How are you feeling? </h1>
+      <p class="flow-text"> Click the button below to get started.</p>
+      <a id="trigger-modal" class="btn-floating btn-large modal-trigger" href="#feelings-modal"><i class="material-icons">edit</i></a>
+    </div>
+  </div>	
+</div>
+
+<!-- Modal Structure -->
+<div id="feelings-modal" class="modal">
+  <div class="modal-content">
+    <form id="feelings-input">
+      <div class="row">
+        <div class="col s10">
+          <input type="text" placeholder="How are you feeling?">
+        </div>
+        <div style="padding-top:15px;" class="col s2">
+          <div class="icons right">
+            <i class="material-icons add">add_circle</i>
+          </div>
+        </div>
+      </div>
+    </form>
     <div class="modal-footer">
-      <a id="something" href="#!" class="modal-action waves-effect waves-green btn right">Ok time to pop!</a>
+      <a id="form-submission" href="#!" class="modal-action waves-effect waves-green btn right">Ok time to pop!</a>
     </div>
   </div>
+</div>
+
+<div class="canvas-container">
+  <canvas id="myCanvas" resize></canvas>
+</div>
+
+<script type="text/paperscript" style="display:none;" canvas="myCanvas">
+
+// GLOBAL VARIABLES
+
+var feelings = [];
+var session_id;
+var sound = true;
+var audio = new Audio('blop.mp3');
 
 
-
-<script>
+// FUNCTIONS FOR USER STATS UPDATING
 
 $(window).on("blur focus", function(e) {
-    var prevType = $(this).data("prevType");
+  var prevType = $(this).data("prevType");
 
-    if (prevType != e.type) {   //  reduce double fire issues
-        switch (e.type) {
-            case "blur":
-            	clearInterval(timer)
-                break;
-            case "focus":
-            	timer = setInterval(function(){
-					lets_count('current_sessions', 'person');
-					lets_count('feelings_today', 'cloud');
-					}, 10000);
-                break;
-        }
+  if (prevType != e.type) {   //  reduce double fire issues
+    switch (e.type) {
+      case "blur":
+      clearInterval(timer)
+      break;
+      case "focus":
+      timer = setInterval(function(){
+       lets_count('current_sessions', 'person');
+       lets_count('feelings_today', 'cloud');
+     }, 10000);
+      break;
     }
-    $(this).data("prevType", e.type);
+  }
+  $(this).data("prevType", e.type);
 })
 
 function lets_count(path, icon){
-	$.ajax({
-		url: "/stats/"+path,
-		method: "GET",
-		data: {},
-		dataType: "json",
-		success: function ( msg ) {
-								current_count(msg.count, icon);
-							}
-	});
-}
+  $.ajax({
+    url: "/stats/"+path,
+    method: "GET",
+    data: {},
+    dataType: "json",
+    success: function ( msg ) {
+      current_count(msg.count, icon);
+    }
+  });
+ }
 
-lets_count('current_sessions', 'person');
-lets_count('feelings_today', 'cloud');
+ lets_count('current_sessions', 'person');
+ lets_count('feelings_today', 'cloud');
 
 function current_count(count, icon){
-	var oldCount = +$("#"+icon +' span').text();
-	if (count !== oldCount){
-		$("#"+icon +' span').fadeOut(500,function(){
-			$("#"+icon +' span').text(count);
-		});
-		$("#"+icon +' span').fadeIn(500);
-	}
+  var oldCount = +$("#"+icon +' span').text();
+  if (count !== oldCount){
+    $("#"+icon +' span').fadeOut(500,function(){
+    $("#"+icon +' span').text(count);
+   });
+    $("#"+icon +' span').fadeIn(500);
+  }
 }
 
 timer = setInterval(function(){
-	lets_count('current_sessions', 'person');
-	lets_count('feelings_today', 'cloud');
-	}, 10000);
+  lets_count('current_sessions', 'person');
+  lets_count('feelings_today', 'cloud');
+}, 10000);
 
+//
+// FUNCTIONS FOR FORM
+//
 
-
+// DELETING INPUT
 
 $('form').on( "click", '.material-icons.delete', function() {
-	$(this).closest('.row').slideUp(200, function(){ 
-		$(this).remove();
-		// var numInputs = $('input').length;
-		if( $('form .icons:last-child .material-icons.add').last().length === 0 ){
-			$('form .row:last-child .icons.right').append('<i class="material-icons add">add_circle</i>');
-		}
-		// if( numInputs === 1) {
-		// 	$('.icons').append('<i class="material-icons add">add_circle</i>');
-		// }
-	});
+  $(this).closest('.row').slideUp(200, function(){ 
+    $(this).remove();
+    if( $('form .icons:last-child .material-icons.add').last().length === 0 ){
+      $('form .row:last-child .icons.right').append('<i class="material-icons add">add_circle</i>');
+    }
+  });
 });
 
+// ADDING INPUT
+
 $('form').on( "click", '.material-icons.add', function() {
-	$(this).remove();
-	$("<%= escape_javascript(render partial: 'form') %>").appendTo('form').hide().slideDown(200);
+  $(this).remove();
+  $("<%= escape_javascript(render partial: 'form') %>").appendTo('form').hide().slideDown(200);
 });
+
+// PREVENTING PRESSING ENTER
 
 $(document).ready(function() {
   $(window).keydown(function(event){
@@ -120,239 +142,192 @@ $(document).ready(function() {
   });
 });
 
-$('#trigger-modal').click(function(){
-	if($(this).hasClass('modal-nav') === false){
-		var clone = $(this).clone();
-		$(this).closest('.container').fadeOut(100, function(){
-			$(this).closest('.container').remove();
-			var new_button = $('<li><a id="trigger-modal" class="modal-trigger" href="#modal1"><i class="material-icons">edit</i></a></li>').prependTo('#right-links').hide();
-			$(new_button).addClass('modal-nav')
-			$(new_button).fadeIn(100);
-			$('.modal-trigger').leanModal();
-		});
-	}
+// SUBMITTING THE FORM
+
+$( "#form-submission" ).click(function(e) {
+  var filledOut = false;
+  feelings = []
+  $('#feelings-input').find('input').each(function () {
+   if($(this).val() === ""){
+    $(this).before("<span> Hey this can't be empty! </span>");
+    return false;
+  }
+  else {
+    filledOut = true;
+    feelings.push(this.value);
+  }
+  });
+  if(filledOut){
+    $('#feelings-modal').closeModal();
+    game();
+  }
+  e.preventDefault();
 });
 
-var sound = true;
-var audio = new Audio('blop.mp3');
+//
+// MODAL STUFF
+//
+
+// STARTING UP THE MODAL
+
+$('#trigger-modal').click(function(){
+  if($(this).hasClass('modal-nav') === false){
+    var clone = $(this).clone();
+    $(this).closest('.container').fadeOut(100, function(){
+      $(this).closest('.container').remove();
+      var new_button = $('<li><a id="trigger-modal" class="modal-trigger" href="#feelings-modal"><i class="material-icons">edit</i></a></li>').prependTo('#right-links').hide();
+      $(new_button).addClass('modal-nav')
+      $(new_button).fadeIn(100);
+      $('.modal-trigger').leanModal();
+    });
+  }
+});
+
+//
+// SOUND STUFF
+//
+
+// ADDING SOUND LINK TO THE RIGHT LINKS IN NAVBAR
 
 $('#right-links').append('<li><a id="sound" href="#"><i class="material-icons">volume_up</i></a></li>');
 
+// MUTING AND UNMUTING THE GAME
+
 $('#sound').click(function(){
-	sound = !sound;
-	if(sound){
-		$(this).html('<i class="material-icons">volume_up</i>');
-	}
-	else {
-		$(this).html('<i class="material-icons">volume_off</i>');
-	}
+  sound = !sound;
+  if(sound){
+    $(this).html('<i class="material-icons">volume_up</i>');
+  }
+  else {
+    $(this).html('<i class="material-icons">volume_off</i>');
+  }
 });
 
-var feelings = [];
-var test = true;
+// ENDING THE SESSION
 
-$( "#something" ).click(function(e) {
-	feelings = []
-	$('#test').find('input').each(function () {
-			if($(this).val() === ""){
-				$(this).before("<span> Hey this can't be empty! </span>");
-				test = false;
-				return false;
-			}
-			else {
-				test = true;
-    		feelings.push(this.value);
-    	}
-	});
-	if(test){
-		$('#modal1').closeModal();
-		main();
-	}
-	e.preventDefault();
+$( window ).unload(function() {
+  clearInterval(timer)
+  if (session_id !== undefined){
+   $.ajax({
+     url: "/session/end",
+     method: "PUT",
+     async: false,
+     data: { session_id: session_id}
+   });
+ }
 });
-	
 
-	var session_id;
+var destination = Point.random() * view.size;
+var paused = true;
+var gameCount = 0;
 
-	$( window ).unload(function() {
-		if (session_id !== undefined){
-			$.ajax({
-					url: "/session/end",
-					method: "PUT",
-					async: false,
-					data: { session_id: session_id}
-			});
-		}
-	});
+function game(){
+  if(session_id === undefined) {
+   $.ajax({
+    url: "/session/create",
+    method: "POST",
+    data: {},
+    dataType: "json",
+    success: function ( msg ) {
+      session_id = msg.id;
+    }
+   });
+  }
+  paused = false;
+  if(gameCount > 0){
+    project.activeLayer.lastChild.remove();
+  }
+  $('canvas').show();
+  createCloud();
+  gameCount += 1;
+}
 
-	function main() {
-		$('svg').remove();
-		if(session_id === undefined) {
-			$.ajax({
-				url: "/session/create",
-				method: "POST",
-				data: {},
-				dataType: "json",
-				success: function ( msg ) {
-										session_id = msg.id;
-									}
-			});
-		}
-		if($(window).width() === 0){
-			$(window).resize(function(){
-				game();
-			});
-		}
-		else {
-			game();
-		}
-		resize();
-	}
+function createCloud(){
+  // group to combine text and cloud
+  group = new Group();
+  
+  // starting points of the group
+  var point = Point.random()*view.size;
 
-	function resize() {
-		$(window).resize(function(){
-			var width = (windowWidth());
-			var height = (windowHeight());
-			$('svg')
-			.attr('height',height)
-			.attr('width',width);
-		});
-	}
+  // Add the text for the cloud first to calculate width
+  var text = new PointText();
+  text.justification = 'center';
+  text.fillColor = 'white';
+  text.content = randomFeeling();
+  text.fontSize = 14;
+  group.addChild(text);
+  // hide the text for now just to be safe
+  text.visible = false;
+  
+  // create the cloud
+  // path for cloud below
+  var pathData = 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z';
+  var path = new Path(pathData);
+  path.fillColor = 'blue';
+  path.position = new Point(point['x'],point['y']);
+  path.insertBelow(text);
+  
+  // putting it all together
+  // change the size of the cloud to fit the text width
+  var scale = cloudScale(text.bounds.width);
+  path.scale(scale)
+  // center the text vertically in the  cloud
+  text.position = new Point(point['x'], point['y'] + centerText(scale));
+  text.visible = true;
+  
+  group.onMouseDown = function(event) {
+    if (sound){
+      audio.play();
+    }
+    $.ajax({
+      url: "/feeling",
+      method: "POST",
+      data: { text : text.content, session_id : session_id },
+      dataType: "html"
+    });
+    this.remove();
+    destination = Point.random() * view.size;
+    createCloud();
+  }
+}
 
-	function windowHeight(){
-		height = $(window).height() - $('nav').height();
-		return height;
-	}
+function onFrame(event) {
+  if(!paused){
+    // Each frame, move the path 1/30th of the difference in position
+    // between it and the destination.
+    
+    // The vector is the difference between the position of
+    // the text item and the destination point:
+    var vector = destination - project.activeLayer.lastChild.position;
+    
+    // We add 1/30th of the vector to the position property
+    // of the text item, to move it in the direction of the
+    // destination point:
+    project.activeLayer.lastChild.position += vector / 30;
+    
+    // If the distance between the path and the destination is less
+    // than 5, we define a new random point in the view to move the
+    // path to:
+    if (vector.length < 5) {
+      destination = Point.random() * view.size;
+    }
+  }
+}
 
-	function windowWidth(){
-		var wWindow = $(window).width();
-		if(wWindow < 960){
-			var width = 960;
-		}
-		else {
-			var width = wWindow;
-		}
-		return width;
-	}
+function centerText(scale){
+  // center the text vertically in the cloud
+  return scale * 11
+}
 
+function cloudScale(textWidth){
+  // constant based on a padding for text that looked good
+  var scale = textWidth * 0.01416712819;
+  if(scale <= 0.8){ scale = 0.8; }
+  return scale;
+}
 
-	function game(){
-		//Width and height
-		var w = (windowWidth());
-		var h = (windowHeight());
-		var r = 50;
-
-		//Original data
-		var dataset = {
-			nodes: [{}]
-		};
-
-		//Initialize a default force layout, using the nodes and edges in dataset
-		var force = d3.layout.force()
-									.nodes(dataset.nodes)
-									.size([w, h])
-									.gravity(0.01)
-									.start();
-
-		var colors = d3.scale.category10();
-
-		//Create SVG element
-		var svg = d3.select("body")
-								.append("svg")
-								.attr("width", w)
-								.attr("height", h);
-
-		//Create nodes as circles
-		var nodes = svg.selectAll("g")
-									 .data(dataset.nodes)
-									 .enter()
-									 .append("g")
-									 .on("click", fadeAway);
-
-		var path = nodes.append('path')
-										.attr('d', 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z');
-
-		var texts = nodes.append("text")
-										 .attr("x", 0)
-										 .attr("dy", ".35em")
-										 .attr("text-anchor", "middle")
-										 .style('fill','white')
-										 .text("click me");
-
-		//Every time the simulation "ticks", this will be called
-		force.on("tick", function () {
-		    nodes.attr("transform", function (d) {
-		    	var xMax = Math.max(r, Math.min(w - r, d.x))
-		    	var yMax = Math.max(r, Math.min(h - r, d.y))
-		    	return "translate(" + xMax + "," + yMax + ")";
-		    });
-
-		});
-
-
-
-		function createNode() {
-
-			var node = {"x":randomPosition(25,w-25),"y":randomPosition(25,h-25)};
-			var theFeeling = randomFeeling()
-
-			dataset.nodes.push(node);
-			nodes = nodes.data(dataset.nodes);
-
-			var newNode = nodes.enter()
-												 .insert("g")
-												 .on("click", fadeAway);
-
-  		var path = nodes.append('path')
-        							.attr('d', 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z')
-        							.attr('transform', function(d){
-
-        							if( theFeeling.length > 9 ){
-        								return 'scale('+ (1 + (theFeeling.length - 9) * 0.07) +')'
-        								}
-        							else {
-        								return 'scale(1)'
-        								}
-        							});
-
-			var someText = newNode.append("text")
-														.attr("x", 0)
-														.attr("dy", ".35em")
-														.attr("text-anchor", "middle")
-														.style('fill','white')
-														.text(theFeeling);
-
-			force.start();
-
-		}
-
-		function randomPosition(min, max) {
-			return Math.floor(Math.random()*(max-min+1)+min);
-		}
-
-		function fadeAway(){
-			d3.select(this).remove();
-			if (sound){
-				audio.play();
-			}
-			var feeling = d3.select(this).selectAll('text');
-			var feeling = $(feeling).text();
-			
-			$.ajax({
-				url: "/feeling",
-				method: "POST",
-				data: { text : feeling, session_id : session_id },
-				dataType: "html"
-			});
-
-
-			createNode();
-		}
-
-		function randomFeeling(){
-			return feelings[Math.floor(Math.random()*feelings.length)];
-		}
-
-	}
+function randomFeeling(){
+ return feelings[Math.floor(Math.random()*feelings.length)];
+}
 
 </script>
