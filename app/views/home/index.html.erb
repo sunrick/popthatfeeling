@@ -6,10 +6,12 @@
 
   $(document).ready(function(){
     $('.canvas-container').height($(window).height() - $('nav').height());
+    $('.canvas-container').width($(window).width());
    });
 
   $(window).resize(function(){
     $('.canvas-container').height($(window).height() - $('nav').height());
+    $('.canvas-container').width($(window).width());
   });
 </script>
 
@@ -45,7 +47,7 @@
 </div>
 
 <div class="canvas-container">
-  <canvas id="myCanvas" resize></canvas>
+  <canvas id="myCanvas" resize="true"></canvas>
 </div>
 
 <script type="text/paperscript" style="display:none;" canvas="myCanvas">
@@ -293,21 +295,8 @@ function createCloud(){
 
 function onFrame(event) {
   if(!paused){
-    // Each frame, move the path 1/30th of the difference in position
-    // between it and the destination.
-    
-    // The vector is the difference between the position of
-    // the text item and the destination point:
     var vector = destination - project.activeLayer.lastChild.position;
-    
-    // We add 1/30th of the vector to the position property
-    // of the text item, to move it in the direction of the
-    // destination point:
     project.activeLayer.lastChild.position += vector / 30;
-    
-    // If the distance between the path and the destination is less
-    // than 5, we define a new random point in the view to move the
-    // path to:
     if (vector.length < 5) {
       destination = Point.random() * view.size;
     }
