@@ -27,7 +27,6 @@ $(window).on("blur focus", function(e) {
         timer = setInterval(function(){
                   lets_count('current_sessions', 'person');
                   lets_count('feelings_today', 'cloud');
-                  console.log("timerworks");
                 }, 20000);
       break;
     }
