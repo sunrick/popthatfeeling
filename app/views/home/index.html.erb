@@ -1,19 +1,4 @@
-<script>	
-	$(document).ready(function(){
-    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-    $('.modal-trigger').leanModal();
-  });
 
-  $(document).ready(function(){
-    $('.canvas-container').height($(window).height() - $('nav').height());
-    $('.canvas-container').width($(window).width());
-   });
-
-  $(window).resize(function(){
-    $('.canvas-container').height($(window).height() - $('nav').height());
-    $('.canvas-container').width($(window).width());
-  });
-</script>
 
 <div id="welcome" class="container">
   <div class="row">
@@ -50,6 +35,28 @@
   <canvas id="myCanvas" resize="true"></canvas>
 </div>
 
+<script>
+// Setup the modal trigger to work
+
+$(document).ready(function(){
+  // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+  $('.modal-trigger').leanModal();
+});
+
+// Give the canvas a width and height
+
+$(document).ready(function(){
+  $('.canvas-container').height($(window).height() - $('nav').height());
+  $('.canvas-container').width($(window).width());
+ });
+
+$(window).resize(function(){
+  $('.canvas-container').height($(window).height() - $('nav').height());
+  $('.canvas-container').width($(window).width());
+});
+
+</script>
+
 <script type="text/paperscript" style="display:none;" canvas="myCanvas">
 
 // GLOBAL VARIABLES
@@ -59,10 +66,21 @@ var session_id;
 var sound = true;
 var audio = new Audio('blop.mp3');
 
-
 // FUNCTIONS FOR USER STATS UPDATING
 
+// chrome and other browsers don't start with focus, firefox does.
+var initTimer;
 var timer;
+
+// initial run of stats before timer kicks in
+lets_count('current_sessions', 'person');
+lets_count('feelings_today', 'cloud');
+
+initTimer = setInterval(function(){
+                  lets_count('current_sessions', 'person');
+                  lets_count('feelings_today', 'cloud');
+                  console.log("timerworks")
+                }, 10000);
 
 $(window).on("blur focus", function(e) {
   var prevType = $(this).data("prevType");
@@ -70,13 +88,16 @@ $(window).on("blur focus", function(e) {
   if (prevType != e.type) {   //  reduce double fire issues
     switch (e.type) {
       case "blur":
+        clearInterval(initTimer);
         clearInterval(timer);
       break;
       case "focus":
+        clearInterval(initTimer);
         timer = setInterval(function(){
                   lets_count('current_sessions', 'person');
                   lets_count('feelings_today', 'cloud');
-                }, 10000);;
+                  console.log("timerworks")
+                }, 10000);
       break;
     }
   }
@@ -95,8 +116,7 @@ function lets_count(path, icon){
   });
  }
 
- lets_count('current_sessions', 'person');
- lets_count('feelings_today', 'cloud');
+// check if counts have updated or not
 
 function current_count(count, icon){
   var oldCount = +$("#"+icon +' span').text();
