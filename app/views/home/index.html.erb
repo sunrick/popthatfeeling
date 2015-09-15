@@ -65,6 +65,7 @@ var feelings = [];
 var session_id;
 var sound = true;
 var audio = new Audio('blop.mp3');
+var feelingsCount = 0;
 
 //
 // FUNCTIONS FOR FORM
@@ -160,6 +161,17 @@ $('#sound').click(function(){
   }
 });
 
+// ADDING CURRENT FEELINGS COUNT
+
+$('#count-links').prepend('<li><a id="feelings-count" href="#"><i class="material-icons left">cloud_upload</i><span>0</span></a></li>');
+
+function update_count(count, id){
+  var oldCount = +$("#"+id +' span').text();
+  if (count !== oldCount){
+    $("#"+id +' span').text(count);
+  }
+}
+
 // ENDING THE SESSION
 
 $( window ).unload(function() {
@@ -209,8 +221,8 @@ function createCloud(){
   // Add the text for the cloud first to calculate width
   var text = new PointText();
   text.justification = 'center';
-  text.fillColor = 'white';
-  text.content = randomFeeling();
+  text.fillColor = '#34495e';
+  text.content = randomArray(feelings);
   text.fontSize = 14;
   group.addChild(text);
   // hide the text for now just to be safe
@@ -219,8 +231,8 @@ function createCloud(){
   // create the cloud
   // path for cloud below
   var pathData = 'M -25,-20 a 20,20 1 0,0 0,40 h 50 a 20,20 1 0,0 0,-40 a 10,10 1 0,0 -15,-10 a 15,15 1 0,0 -35,10 z';
-  var path = new Path(pathData);
-  path.fillColor = 'blue';
+  var path = new Path(pathData); 
+  path.fillColor = '#ecf0f1'
   path.position = new Point(point['x'],point['y']);
   path.insertBelow(text);
   
@@ -233,6 +245,8 @@ function createCloud(){
   text.visible = true;
   
   group.onMouseDown = function(event) {
+    feelingsCount += 1;
+    update_count(feelingsCount,'feelings-count')
     if (sound){
       audio.play();
     }
@@ -270,8 +284,8 @@ function cloudScale(textWidth){
   return scale;
 }
 
-function randomFeeling(){
- return feelings[Math.floor(Math.random()*feelings.length)];
+function randomArray(array){
+ return array[Math.floor(Math.random()*array.length)];
 }
 
 </script>
