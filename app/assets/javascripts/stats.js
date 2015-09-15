@@ -49,12 +49,9 @@ function lets_count(path, icon){
 
 // check if counts have updated or not
 
-function update_count(count, icon){
-  var oldCount = +$("#"+icon +' span').text();
+function update_count(count, id){
+  var oldCount = +$("#"+id +' span').text();
   if (count !== oldCount){
-    $("#"+icon +' span').fadeOut(500,function(){
-    $("#"+icon +' span').text(count);
-   });
-    $("#"+icon +' span').fadeIn(500);
+    $("#"+id +' span').text(count);
   }
 }

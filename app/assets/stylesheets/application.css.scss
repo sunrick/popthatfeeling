@@ -16,17 +16,52 @@
 
 @import "materialize";
 
+/* MODAL FORMATTING */
+
+.modal, .modal .modal-footer {
+	background-color: #34495e;
+}
+
+.modal a {
+	background-color: #ecf0f1;
+	color: #34495e;
+}
+.modal a:hover {
+	background-color: #bdc3c7;
+	color: #34495e;
+}
+
+input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), 
+input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), 
+input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), 
+input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), 
+input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), 
+textarea.materialize-textarea:focus:not([readonly]) {
+	border-bottom: 1px solid #ecf0f1;
+    box-shadow: 0 1px 0 0 #ecf0f1;
+}
+
+input[type=text], input[type=password], 
+input[type=email], input[type=url], 
+input[type=time], input[type=date], 
+input[type=datetime-local], input[type=tel], 
+input[type=number], input[type=search], textarea.materialize-textarea {
+	border-bottom: 1px solid #ecf0f1;
+}
+
 .add {
-	color:green;
+	color:#ecf0f1;
 	cursor: pointer; 
 	cursor: hand;
 }
 
 .delete {
-	color:red;
+	color:#ecf0f1;
 	cursor: pointer; 
 	cursor: hand;
 }
+
+/* NAV FORMATTING */
 
 nav {
 	box-shadow: none;
@@ -42,16 +77,28 @@ nav a.button-collapse {
 	margin-left:15px;
 }
 
+/* SIDE NAV FORMATTING */
+
+.side-nav li:hover, .side-nav li.active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* WELCOME MESSAGE FORMATTING */
+
 #welcome a {
 	height:100px;
 	width:100px;
 	margin-top:20px;
+	background-color: #ecf0f1;
 }
 
 #welcome i {
 	line-height:100px;
 	font-size: 3rem;
+	color:#34495e;
 }
+
+/* MAKING SURE CANVAS LOOKS RIGHT, DOESN'T MAKE SCROLL BAR APPEAR */
 
 canvas[resize] {
     width: 100%;
@@ -61,6 +108,8 @@ canvas[resize] {
 canvas {
 	display: block;
 }
+
+/* OVERALL COLOR SCHEME */
 
 html {
 	color: #ecf0f1;
