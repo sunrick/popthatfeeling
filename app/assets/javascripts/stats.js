@@ -11,7 +11,6 @@ lets_count('feelings_today', 'cloud');
 initTimer = setInterval(function(){
                   lets_count('current_sessions', 'person');
                   lets_count('feelings_today', 'cloud');
-                  console.log("timerworksinit");
                 }, 20000);
 
 $(window).on("blur focus", function(e) {
@@ -43,14 +42,14 @@ function lets_count(path, icon){
     data: {},
     dataType: "json",
     success: function ( msg ) {
-      current_count(msg.count, icon);
+      update_count(msg.count, icon);
     }
   });
  }
 
 // check if counts have updated or not
 
-function current_count(count, icon){
+function update_count(count, icon){
   var oldCount = +$("#"+icon +' span').text();
   if (count !== oldCount){
     $("#"+icon +' span').fadeOut(500,function(){
