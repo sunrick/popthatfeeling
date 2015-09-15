@@ -101,7 +101,7 @@ $(document).ready(function() {
 
 // SUBMITTING THE FORM
 
-$( "#form-submission" ).click(function(e) {
+$( "#form-submission" ).on('click', function(e) {
   var filledOut = false;
   feelings = []
   $('#feelings-input').find('input').each(function () {
