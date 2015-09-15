@@ -24,13 +24,13 @@
       </div>
     </form>
     <div class="modal-footer">
-      <a id="form-submission" href="#!" class="modal-action btn right">Ok time to pop!</a>
+      <a id="form-submission" class="modal-action btn right">Ok time to pop!</a>
     </div>
   </div>
 </div>
 
-<div class="canvas-container">
-  <canvas id="myCanvas" resize="true"></canvas>
+<div class="canvas-container" style="display:none;">
+  <canvas id="myCanvas" style="display:none;" resize="true"></canvas>
 </div>
 
 <script>
@@ -41,21 +41,9 @@ $(document).ready(function(){
   $('.modal-trigger').leanModal();
 });
 
-// Give the canvas a width and height
-
-$(document).ready(function(){
-  $('.canvas-container').height($(window).height() - $('nav').height());
-  $('.canvas-container').width($(window).width());
- });
-
-$(window).resize(function(){
-  $('.canvas-container').height($(window).height() - $('nav').height());
-  $('.canvas-container').width($(window).width());
-});
-
 </script>
 
-<script type="text/paperscript" style="display:none;" canvas="myCanvas">
+<script type="text/paperscript" canvas="myCanvas">
 
 // GLOBAL VARIABLES
 
@@ -152,12 +140,12 @@ $('#trigger-modal').click(function(){
 
 // ADDING SOUND LINK TO THE RIGHT LINKS IN NAVBAR
 
-$('#right-links').append('<li><a id="sound" href="#"><i class="material-icons">volume_up</i></a></li>');
+$('#right-links').append('<li><a id="sound"><i class="material-icons">volume_up</i></a></li>');
 
 
 // MUTING AND UNMUTING THE GAME
 
-$('#sound').click(function(){
+$('#sound').click(function(event){
   sound = !sound;
   if(sound){
     $(this).html('<i class="material-icons">volume_up</i>');
@@ -165,6 +153,7 @@ $('#sound').click(function(){
   else {
     $(this).html('<i class="material-icons">volume_off</i>');
   }
+  event.preventDefault();
 });
 
 // ADDING CURRENT FEELINGS COUNT
@@ -198,7 +187,29 @@ var destination = Point.random() * view.size;
 var paused = true;
 var gameCount = 0;
 
+
+// Give the canvas a width and height
+
+$(document).ready(function(){
+  $('.canvas-container').height($(window).height() - $('nav').height());
+  $('.canvas-container').width($(window).width());
+  view.viewSize.width =  $('.canvas-container').width();
+  view.viewSize.height =  $('.canvas-container').height();
+ });
+
+$(window).resize(function(){
+  $('.canvas-container').height($(window).height() - $('nav').height());
+  $('.canvas-container').width($(window).width());
+  view.viewSize.width =  $('.canvas-container').width();
+  view.viewSize.height =  $('.canvas-container').height();
+});
+
+
+
 function game(){
+  // make sure the view size is correct
+  view.viewSize.width =  $('.canvas-container').width();
+  view.viewSize.height = $('.canvas-container').height();
   if(session_id === undefined) {
    $.ajax({
     url: "/session/create",
@@ -214,6 +225,7 @@ function game(){
   if(gameCount > 0){
     project.activeLayer.lastChild.remove();
   }
+  $('.canvas-container').show();
   $('canvas').show();
   createCloud();
   gameCount += 1;
