@@ -54,23 +54,14 @@ nav {
 	background-color: transparent;
 }
 
-nav .nav-wrapper i {
-	color: #000;
+nav .nav-wrapper a {
+	color: #ecf0f1;
 }
 
 nav a.button-collapse {
 	display: block;
 	margin-left:15px;
 }
-
-#count-links a {
-	color: #000;
-}
-
-#right-links a {
-	color: #000;
-}
-
 
 #welcome a {
 	height:100px;
@@ -90,4 +81,14 @@ canvas[resize] {
 
 canvas {
 	display: block;
+}
+
+html {
+	color: #ecf0f1;
+	
+}
+
+body, .side-nav {
+	background-color: #34495e;
+	
 }
