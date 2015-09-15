@@ -14,3 +14,5 @@
 //= require jquery_ujs
 //= require materialize-sprockets
 //= require_tree .
+
+$(document).ready(function(){$('body').fadeIn(1000);});
