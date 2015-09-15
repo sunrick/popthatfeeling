@@ -286,7 +286,8 @@ function onFrame(event) {
   if(!paused){
     var vector = destination - project.activeLayer.lastChild.position;
     project.activeLayer.lastChild.position += vector / 30;
-    if (vector.length < 5) {
+    var topDistance = project.activeLayer.lastChild.bounds.top
+    if (vector.length < 5 || topDistance < 1) {
       destination = Point.random() * view.size;
     }
   }
