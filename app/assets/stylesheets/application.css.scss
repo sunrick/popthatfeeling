@@ -31,6 +31,10 @@
 	color: #34495e;
 }
 
+.modal i:hover{
+	color: #bdc3c7;
+}
+
 input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), 
 input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), 
 input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), 
@@ -59,6 +63,10 @@ input[type=number], input[type=search], textarea.materialize-textarea {
 	color:#ecf0f1;
 	cursor: pointer; 
 	cursor: hand;
+}
+
+#form-submission {
+	float:none;
 }
 
 /* NAV FORMATTING */
