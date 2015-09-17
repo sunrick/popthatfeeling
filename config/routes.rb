@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   # stats routes
   get 'stats/current_sessions', to: 'stats#current_sessions'
   get 'stats/feelings_today', to: 'stats#feelings_today'
+  get 'stats', to: 'stats#stats'
   
 end

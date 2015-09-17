@@ -1,0 +1,14 @@
+<div class="container">
+	<div class="row">
+		<div class="col s12">
+			<% @stats.each do |s| %>
+				<p class="flow-text"><%= s[:text] %></p>
+				<p>There have been <%= s[:s_count] %> popping parties.</p>
+				<p><%= s[:f_count] %> feelings have been popped.</p>
+				<p>That is an average of about <%= s[:f_average] %> feelings popped per session!</p>
+				<p>People have spent a total of <%= s[:s_time] %> popping feelings.</p>
+				<p>The average person spent about <%= s[:s_average] %> popping feelings. </p>
+			<% end %>
+		</div>
+	</div>
+</div>
