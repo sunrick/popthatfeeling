@@ -285,9 +285,9 @@ function createCloud(){
 function onFrame(event) {
   if(!paused){
     var vector = destination - project.activeLayer.lastChild.position;
-    project.activeLayer.lastChild.position += vector / 300;
-    var topDistance = project.activeLayer.lastChild.bounds.top
-    if (vector.length < 5 || topDistance < 1) {
+    project.activeLayer.lastChild.position += vector / 100;
+    // var topDistance = project.activeLayer.lastChild.bounds.top
+    if (vector.length < 5) {
       destination = Point.random() * view.size;
     }
   }
