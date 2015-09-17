@@ -132,3 +132,14 @@ a:hover {
 	cursor: pointer; 
 	cursor: hand;
 }
+
+/* STATS SLIDER */
+
+.slider .slides {
+	background-color: transparent;
+}
+
+.slider .slides li .caption, 
+.slider .slides li .caption p {
+	color: #ecf0f1;
+}

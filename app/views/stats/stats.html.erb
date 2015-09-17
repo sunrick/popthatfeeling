@@ -1,14 +1,28 @@
 <div class="container">
-	<div class="row">
-		<div class="col s12">
-			<% @stats.each do |s| %>
-				<p class="flow-text"><%= s[:text] %></p>
-				<p>There have been <%= s[:s_count] %> popping parties.</p>
-				<p><%= s[:f_count] %> feelings have been popped.</p>
-				<p>That is an average of about <%= s[:f_average] %> feelings popped per session!</p>
-				<p>People have spent a total of <%= s[:s_time] %> popping feelings.</p>
-				<p>The average person spent about <%= s[:s_average] %> popping feelings. </p>
+	<div class="slider">
+		<ul class="slides">
+			<% @stats.each do |stat| %>
+				<li>
+					<!-- Slider doesn't work unless there is an image -->
+					<img src="">
+					<div class="caption center-align">
+						<h1><%= stat[:text] %></h1>
+						<p class="flow-text"><%= number_with_delimiter(stat[:s_count], delimiter: ',') %> people have spent <%= stat[:s_time] %> popping their bad feelings. Together we popped <%= number_with_delimiter(stat[:f_count], delimiter: ',') %> feelings.</p>
+						<p class="flow-text"> </p>
+						<% if stat[:s_count] > 1 && stat[:f_count] > 1 %>
+							<h4> You're not alone. </h4>
+						<% end %>
+					</div>
+				</li>
 			<% end %>
-		</div>
+		</ul>
 	</div>
 </div>
+
+<script>
+
+	$(document).ready(function(){
+      $('.slider').slider({interval: 15000, transition: 1000});
+    });
+        
+</script>
