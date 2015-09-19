@@ -265,16 +265,19 @@ function createCloud(){
   text.visible = true;
   
   group.onMouseDown = function(event) {
-    feelingsCount += 1;
-    update_count(feelingsCount,'feelings-count')
+    // feelingsCount += 1;
+    // update_count(feelingsCount,'feelings-count')
     if (sound){
       audio.play();
     }
     $.ajax({
       url: "/feeling",
       method: "POST",
-      data: { text : text.content, session_id : session_id },
-      dataType: "html"
+      data: { session_id : session_id },
+      dataType: "json",
+      success: function ( msg ) {
+        session_id = msg.id;
+      }
     });
     this.remove();
     destination = Point.random() * view.size;
