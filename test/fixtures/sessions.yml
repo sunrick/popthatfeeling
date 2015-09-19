@@ -4,8 +4,14 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+session_six_min:
+  created_at: <%= 6.minutes.ago %>
+
+session_finished:
+  end_time: <%= Time.now %>
+
+session_new_no_feelings: {}
+
+session_tired: {}
+
+session_old_tired: {}
