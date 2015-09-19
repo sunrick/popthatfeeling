@@ -65,7 +65,7 @@ class StatsController < ApplicationController
     # session stats
     s_count = sessions.count
     s_time =  sessions.sum('extract(epoch from end_time - created_at)').to_i
-    s_average = distance_of_time_in_words(s_time / s_count)
+    # s_average = distance_of_time_in_words(s_time / s_count)
     s_time = distance_of_time_in_words(s_time)
 
     # feeling stats
@@ -74,9 +74,10 @@ class StatsController < ApplicationController
     results = { text: text_helper(period),
                 s_count: s_count, 
                 s_time: s_time, 
-                s_average: s_average,
+                # s_average: s_average,
                 f_count: f_count,
-                f_average: f_count / s_count }
+                # f_average: f_count / s_count 
+              }
   end
 
   def text_helper(period)
