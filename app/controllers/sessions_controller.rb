@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def end
-    @session = Session.find(params[:session_id]).update(end_time: DateTime.now)
+    @session = Session.find_by(id: params[:session_id], end_time: nil).update(end_time: DateTime.now)
     render nothing: true
   end
 
