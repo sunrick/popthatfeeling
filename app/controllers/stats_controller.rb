@@ -3,7 +3,12 @@ class StatsController < ApplicationController
   include ActionView::Helpers::DateHelper
 
   def feelings_today
-    @sessions = Feeling.where('created_at >= ?', 24.hours.ago).count
+    @feelings = Feeling.where('created_at >= ?', 24.hours.ago).count
+    render json: { count: @feelings}
+  end
+
+  def current_sessions
+    @sessions = Session.where(end_time: nil).count
     render json: { count: @sessions}
   end
 
