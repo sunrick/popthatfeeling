@@ -13,3 +13,9 @@ class CleanSessionsJob < ActiveJob::Base
     end
   end
 end
+
+job = Sidekiq::Cron::Job.find('Clean Sessions every 30min')
+job.destroy if job
+Sidekiq::Cron::Job.create( name: 'Clean Sessions every 30min',
+                           cron: '* */10 * * *', 
+                           klass: 'CleanSessionsJob')
